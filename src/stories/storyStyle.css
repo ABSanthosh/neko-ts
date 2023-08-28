@@ -1,0 +1,93 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body,
+#storybook-root,
+#app {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+  height: 100vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#app {
+  gap: 20px;
+}
+
+#restingPlace {
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  background-color: burlywood;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px;
+}
+
+#nekoContainer {
+  height: 500px;
+  width: 500px;
+  border: 1px solid black;
+  background-color: azure;
+  border-radius: 5px;
+}
+
+#storybook-root {
+  gap: 20px;
+}
+
+#storybook-root button {
+  width: auto;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #000;
+    color: #fff;
+  }
+}
+
+#storybook-root button:disabled {
+  background-color: #ccc;
+  color: #000;
+  cursor: not-allowed;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+[data-neko] {
+  position: fixed;
+  image-rendering: pixelated;
+  background-image: url("/neko.gif");
+  background-size: calc(800%) calc(400%);
+  user-select: none;
+  pointer-events: none;
+  z-index: 5;
+}
