@@ -11,7 +11,24 @@ enum NekoOffset {
 }
 
 export default class Neko {
-  public size: number = NekoSizeVariations.SMALL;
+  /**
+   * The size of the neko.
+   *
+   * @default NekoSizeVariations.SMALL
+   * @readonly
+   *
+   * can be changed with setSize() method.
+   */
+  public size: NekoSizeVariations = NekoSizeVariations.SMALL;
+
+  /**
+   * Status of the neko. If it is awake or not.
+   *
+   * @default true
+   * @readonly
+   *
+   * can be changed with wake() and sleep() methods.
+   */
   public isAwake: boolean = true;
 
   private nekoEl: HTMLDivElement | undefined;
@@ -109,15 +126,91 @@ export default class Neko {
 
   private parent: HTMLElement = document.body;
 
-  // constructor(nekoId?: number | null, nekoSize?: NekoSizeVariations | null) {
-  constructor(options: {
+  constructor(options?: {
+    /**
+     * This is the id for this neko instance. It will be used in the data-neko attribute and id="neko-{nekoId}".
+     * @default 0
+     * @type {number}
+     *
+     * @example
+     * const neko = new Neko({
+     *  nekoId: 1,
+     * });
+     */
     nekoId?: number | null;
+    /**
+     * It will be used to set the width and height of the neko.
+     * @default NekoSizeVariations.SMALL
+     *
+     * @type {NekoSizeVariations}
+     *
+     * @see NekoSizeVariations
+     *
+     * @example
+     * const neko = new Neko({
+     *    nekoSize: NekoSizeVariations.MEDIUM ,
+     * });
+     */
     nekoSize?: NekoSizeVariations | null;
+    /**
+     * It will be used to set the speed of the neko.
+     *
+     * @default 10
+     *
+     * @type {number}
+     *
+     * @see maxNekoSpeed = 20
+     * @see minNekoSpeed = 10
+     *
+     * @example
+     * const neko = new Neko({
+     *   speed: 20,
+     * });
+     *
+     */
     speed?: number | null;
+    /**
+     * It will be used to set the origin of the neko. When the neko is created, it will be placed at this position and when neko.sleep() is called, it will return to this position.
+     *
+     * @default { x: 0, y: 0 }
+     *
+     * @type {{ x: number, y: number }}
+     *
+     * @example
+     * const neko = new Neko({
+     *  origin: {
+     *    x: 100,
+     *    y: 100,
+     *   },
+     * });
+     *
+     * Or you can use an element as origin:
+     * @example
+     * const restingPlace = document.getElementById("restingPlace");
+     * const neko = new Neko({
+     *  origin: {
+     *    x: restingPlace.offsetLeft + restingPlace.offsetWidth / 2,
+     *    y: restingPlace.offsetTop + restingPlace.offsetHeight / 2,
+     *  },
+     * });
+     */
     origin?: {
       x: number;
       y: number;
     };
+    /**
+     * It will be used to set the parent of the neko. The neko will be created inside this element and neko will listen to mousemove and touchmove events only inside this element.
+     *
+     * @default document.body
+     *
+     * @type {HTMLElement}
+     *
+     * @example
+     * const nekoContainer = document.getElementById("nekoContainer");
+     * const neko = new Neko({
+     *    parent: nekoContainer,
+     * });
+     */
     parent?: HTMLElement;
   }) {
     // get element with attribute data-neko
@@ -126,7 +219,7 @@ export default class Neko {
       return;
     }
 
-    if (options.speed) {
+    if (options && options.speed) {
       this.nekoSpeed =
         options.speed > this.maxNekoSpeed
           ? this.maxNekoSpeed
@@ -135,7 +228,7 @@ export default class Neko {
           : options.speed;
     }
 
-    if (options.origin) {
+    if (options && options.origin) {
       this.nekoPosX = options.origin.x;
       this.nekoPosY = options.origin.y + this.getOffset(this.size);
       this.mousePosX = this.nekoPosX;
@@ -145,12 +238,13 @@ export default class Neko {
       this.origin.y = options.origin.y;
     }
 
-    if (options.parent) {
+    if (options && options.parent) {
       this.parent = options.parent;
     }
 
-    this.size = options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
-    this.nekoId = options.nekoId ? options.nekoId : this.nekoId;
+    this.size =
+      options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
+    this.nekoId = options && options.nekoId ? options.nekoId : this.nekoId;
     this.create();
   }
 
@@ -173,6 +267,14 @@ export default class Neko {
     this.nekoEl.style.height = `${this.size}px`;
     this.nekoEl.style.left = `${this.nekoPosX - this.size / 2}px`;
     this.nekoEl.style.top = `${this.nekoPosY - this.size / 2}px`;
+
+    this.nekoEl.style.position = "fixed";
+    this.nekoEl.style.imageRendering = "pixelated";
+    this.nekoEl.style.backgroundImage = "url(/neko.gif)";
+    this.nekoEl.style.backgroundSize = "calc(800%) calc(400%)";
+    this.nekoEl.style.userSelect = "none";
+    this.nekoEl.style.pointerEvents = "none";
+    this.nekoEl.style.zIndex = "5";
 
     this.parent.appendChild(this.nekoEl);
 
@@ -309,11 +411,39 @@ export default class Neko {
     this.nekoEl!.style.top = `${this.nekoPosY - this.size / 2}px`;
   }
 
-  public destroy() {
-    this.nekoEl!.remove();
-    clearInterval((window as any).nekoInterval);
+  /**
+   * If id is not provided, it will try to destroy the neko associated with this instance.
+   * @param {number} id
+   * @returns {void}
+   * @example
+   * const neko = new Neko({
+   *    nekoId: 1,
+   * });
+   *
+   * neko.destroy();
+   *
+   */
+  public destroy(id?: number) {
+    if (id && id !== this.nekoId) return;
+    else {
+      const neko = document.querySelector(`[data-neko="neko-${this.nekoId}"]`);
+      if (neko) {
+        neko.remove();
+        clearInterval((window as any).nekoInterval);
+        this.nekoEl!.remove();
+      }
+    }
   }
 
+  /**
+   * Put the neko to sleep. It will stop listening to mousemove and touchmove events and neko will return to its origin(+/- some random pixels).
+   *
+   * @returns {void}
+   * @example
+   * const neko = new Neko();
+   *
+   * neko.sleep();
+   */
   public sleep() {
     if (!this.isAwake) return;
 
@@ -326,6 +456,13 @@ export default class Neko {
     this.isAwake = false;
   }
 
+  /**
+   * Wake up the neko. It will start listening to mousemove and touchmove events.
+   * @returns {void}
+   * @example
+   * const neko = new Neko();
+   * neko.wake();
+   */
   public wake() {
     if (this.isAwake) return;
 
@@ -352,6 +489,16 @@ export default class Neko {
     this.isAwake = true;
   }
 
+  /**
+   * Set the size of the neko.
+   * @param {NekoSizeVariations} size
+   * @returns {void}
+   * @example
+   * const neko = new Neko();
+   * neko.setSize(NekoSizeVariations.MEDIUM);
+   * neko.setSize(NekoSizeVariations.LARGE);
+   * neko.setSize(NekoSizeVariations.SMALL);
+   */
   public setSize(size: NekoSizeVariations) {
     this.size = size;
     this.nekoEl!.style.width = `${this.size}px`;

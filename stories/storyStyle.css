@@ -81,7 +81,7 @@ body,
   align-items: center;
   gap: 15px;
 }
-
+/* 
 [data-neko] {
   position: fixed;
   image-rendering: pixelated;
@@ -90,4 +90,4 @@ body,
   user-select: none;
   pointer-events: none;
   z-index: 5;
-}
+} */

@@ -1,5 +1,5 @@
 import "./storyStyle.css";
-import { Neko, NekoSizeVariations } from "..";
+import { Neko, NekoSizeVariations } from "../src";
 
 export function RenderPage() {
   const app = document.createElement("div");
@@ -46,7 +46,7 @@ export function RenderPage() {
   };
 
   enableButton.id = "enable";
-  enableButton.innerText = "Wake up";
+  enableButton.innerText = "Wake up ";
   enableButton.onclick = () => {
     if (neko && !neko.isAwake) {
       neko.wake();
