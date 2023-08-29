@@ -1,8 +1,9 @@
 {
   "name": "neko-ts",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.0.4",
   "type": "module",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -15,6 +16,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/neko-ts.js",
       "require": "./dist/neko-ts.umd.cjs"
     }
@@ -34,6 +36,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.3.2",
+    "terser": "^5.19.2",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.5.2"

@@ -1,3 +1,5 @@
+import NekoGif from "./neko.gif";
+
 export enum NekoSizeVariations {
   SMALL = 32,
   MEDIUM = 38,
@@ -212,6 +214,16 @@ export default class Neko {
      * });
      */
     parent?: HTMLElement;
+    /**
+     * It will be used to set the initial state of the neko. If it is set to "sleep", the neko will be created in sleep state and will not listen to mousemove and touchmove events.
+     * @default "awake"
+     * @type {"awake" | "sleep"}
+     * @example
+     * const neko = new Neko({
+     *   defaultState: "sleep",
+     * });
+     */
+    defaultState?: "awake" | "sleep";
   }) {
     // get element with attribute data-neko
     const isNekoAlive = document.querySelector("[data-neko]") as HTMLDivElement;
@@ -242,6 +254,10 @@ export default class Neko {
       this.parent = options.parent;
     }
 
+    if (options && options.defaultState === "sleep") {
+      this.isAwake = false;
+    }
+
     this.size =
       options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
     this.nekoId = options && options.nekoId ? options.nekoId : this.nekoId;
@@ -270,13 +286,19 @@ export default class Neko {
 
     this.nekoEl.style.position = "fixed";
     this.nekoEl.style.imageRendering = "pixelated";
-    this.nekoEl.style.backgroundImage = "url(/neko.gif)";
+    this.nekoEl.style.backgroundImage = `url(${NekoGif})`;
     this.nekoEl.style.backgroundSize = "calc(800%) calc(400%)";
     this.nekoEl.style.userSelect = "none";
     this.nekoEl.style.pointerEvents = "none";
     this.nekoEl.style.zIndex = "5";
 
     this.parent.appendChild(this.nekoEl);
+    (window as any).nekoInterval = setInterval(this.frame.bind(this), 60);
+
+    if (!this.isAwake) {
+      this.idle();
+      return;
+    }
 
     this.parent.addEventListener(
       "mousemove",
@@ -294,8 +316,6 @@ export default class Neko {
       },
       { signal: this.touchController.signal }
     );
-
-    (window as any).nekoInterval = setInterval(this.frame.bind(this), 60);
   }
 
   private setSprite(name: string, frame: number) {

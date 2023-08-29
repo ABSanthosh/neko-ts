@@ -10,6 +10,7 @@ export default defineConfig({
       name: "neko-ts",
       fileName: "neko-ts",
     },
+    minify: "terser",
   },
   plugins: [dts()],
 });

@@ -1,4 +1,5 @@
 import "./storyStyle.css";
+// import { Neko, NekoSizeVariations } from "../dist/neko-ts";
 import { Neko, NekoSizeVariations } from "../src";
 
 export function RenderPage() {
@@ -26,6 +27,7 @@ export function RenderPage() {
         y: restingPlace.offsetTop + restingPlace.offsetHeight / 2,
       },
       parent: nekoContainer,
+      defaultState: "sleep",
     });
   });
 
@@ -33,7 +35,8 @@ export function RenderPage() {
 
   const disableButton = document.createElement("button");
   const enableButton = document.createElement("button");
-  enableButton.disabled = true;
+  enableButton.disabled = neko && (neko as Neko).isAwake ? true : false;
+  disableButton.disabled = neko && (neko as Neko).isAwake ? false : true;
 
   disableButton.id = "disable";
   disableButton.innerText = "Sleep";
