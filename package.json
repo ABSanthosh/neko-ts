@@ -1,7 +1,7 @@
 {
   "name": "neko-ts",
   "private": false,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "license": "UNLICENSED",
   "repository": "https://github.com/ABSanthosh/neko-ts",
@@ -12,9 +12,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "predeploy": "yarn build-storybook",
     "build-storybook": "storybook build && touch storybook-static/.nojekyll",
-    "deploy": "gh-pages -d storybook-static"
+    "deploy": "yarn build-storybook && gh-pages -d storybook-static"
   },
   "main": "./dist/neko-ts.umd.cjs",
   "module": "./dist/neko-ts.js",
