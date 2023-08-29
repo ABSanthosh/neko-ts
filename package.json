@@ -6,12 +6,15 @@
   "license": "UNLICENSED",
   "repository": "https://github.com/ABSanthosh/neko-ts",
   "author": "ABSanthosh <a.b.santhosh02@gmail.com>",
+  "homepage": "https://ABSanthosh.github.io/neko-ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "predeploy": "yarn build-storybook",
+    "build-storybook": "storybook build && touch storybook-static/.nojekyll",
+    "deploy": "gh-pages -d storybook-static"
   },
   "main": "./dist/neko-ts.umd.cjs",
   "module": "./dist/neko-ts.js",
@@ -35,6 +38,7 @@
     "@storybook/html-vite": "^7.3.2",
     "@storybook/testing-library": "^0.2.0",
     "@types/node": "^20.5.7",
+    "gh-pages": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.3.2",
@@ -42,6 +46,9 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.5.2"
+  },
+  "resolutions": {
+    "jackspeak": "2.1.1"
   },
   "keywords": [
     "neko",
