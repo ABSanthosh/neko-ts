@@ -4,6 +4,8 @@
   "version": "0.0.4",
   "type": "module",
   "license": "UNLICENSED",
+  "repository": "https://github.com/ABSanthosh/neko-ts",
+  "author": "ABSanthosh <a.b.santhosh02@gmail.com>",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -40,5 +42,20 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.5.2"
-  }
+  },
+  "keywords": [
+    "neko",
+    "neko-ts",
+    "oneko.js",
+    "oneko",
+    "jneko",
+    "Kenji Gotoh neko",
+    "Tatsuya Kato onkeo",
+    "Masayuki Koba xneko",
+    "neko.js",
+    "xneko",
+    "following mouse",
+    "cat",
+    "fun"
+  ]
 }

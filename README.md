@@ -1,4 +1,4 @@
-# Neko-Ts
+# neko-ts
 
 A simple fun addition to your website, a neko that follows your mouse around! (or just sits there if you don't move your mouse)
 
