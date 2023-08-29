@@ -1,5 +1,7 @@
 # neko-ts
 
+[![install size](https://packagephobia.com/badge?p=neko-ts@0.0.5)](https://packagephobia.com/result?p=neko-ts@0.0.5)
+
 A simple fun addition to your website, a neko that follows your mouse around! (or just sits there if you don't move your mouse)
 
 ## Installation
@@ -89,10 +91,14 @@ useEffect(() => {
 Someone please test this in multiple frameworks. I know this works in Svelte, but I don't know about others.
 
 - [x] Svelte
-- [ ] React
+- [x] React
 - [ ] Vue
 - [ ] Angular
 - and more...
+
+## TODO
+
+- [ ] why is the package size so big? [This](https://github.com/Nekos-life/nekos-dot-life#readme) package has 9 files and only 12.1kb while this has only 6 files and its 35.5kb
 
 ## Contributing
 
