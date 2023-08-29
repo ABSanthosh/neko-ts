@@ -43,6 +43,26 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 ```
 
+### React
+
+```tsx
+import { Neko } from "neko-ts";
+
+const neko = useRef<Neko>();
+
+useEffect(() => {
+  if (!neko.current) {
+    neko.current = new Neko({
+      origin: {
+        x: 100,
+        y: 100,
+      },
+    });
+  }
+  // React does not know when object properties change, so we have to manually force a re-render
+}, [neko]);
+```
+
 ## Options
 
 | Option   | Type                   | Default                  | Description                                            |
