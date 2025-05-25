@@ -446,7 +446,7 @@ export default class Neko {
   public destroy(id?: number) {
     if (id && id !== this.nekoId) return;
     else {
-      const neko = document.querySelector(`[data-neko="neko-${this.nekoId}"]`);
+      const neko = document.querySelector(`[data-neko="${this.nekoId}"]`);
       if (neko) {
         neko.remove();
         clearInterval((window as any).nekoInterval);
