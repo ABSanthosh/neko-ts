@@ -233,19 +233,19 @@ export default class Neko {
      * @example
      * const neko = new Neko({
      *   gifPathOrModule: "/my-path/to/neko.gif",
-     *   gifPathOrModule: await import("./neko.gif"),
      * });
      */
     gifPathOrModule?: string;
+    /**
      * The animation speed of neko (refresh rate in ms)
-     * @default 60
+     * @default 100
      * @type {number}
      * @example
      * const neko = new Neko({
      *   animationSpeed: 100,
      * });
      */
-    animationSpeed?: number | null;
+    animationSpeed?: number;
   }) {
     // get element with attribute data-neko
     const isNekoAlive = document.querySelector("[data-neko]") as HTMLDivElement;
@@ -288,8 +288,8 @@ export default class Neko {
       options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
     this.nekoId = options && options.nekoId ? options.nekoId : this.nekoId;
 
-    if(options && options.animationSpeed) {
-      this.animationSpeed = options.animationSpeed;
+    if (options && options.animationSpeed !== undefined) {
+      this.animationSpeed = Math.max(16, options.animationSpeed);
     }
 
     this.create();
