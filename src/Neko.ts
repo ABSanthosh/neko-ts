@@ -51,6 +51,7 @@ export default class Neko {
   private idleAnimationFrame: number = 0;
   private nekoSpeed: number = 10;
   private nekoGif: string = NekoGif;
+  private animationSpeed: number = 100;
 
   private distanceFromMouse: number = 25;
 
@@ -236,6 +237,15 @@ export default class Neko {
      * });
      */
     gifPathOrModule?: string;
+     * The animation speed of neko (refresh rate in ms)
+     * @default 60
+     * @type {number}
+     * @example
+     * const neko = new Neko({
+     *   animationSpeed: 100,
+     * });
+     */
+    animationSpeed?: number | null;
   }) {
     // get element with attribute data-neko
     const isNekoAlive = document.querySelector("[data-neko]") as HTMLDivElement;
@@ -277,6 +287,11 @@ export default class Neko {
     this.size =
       options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
     this.nekoId = options && options.nekoId ? options.nekoId : this.nekoId;
+
+    if(options && options.animationSpeed) {
+      this.animationSpeed = options.animationSpeed;
+    }
+
     this.create();
   }
 
@@ -309,7 +324,7 @@ export default class Neko {
     this.nekoEl.style.zIndex = "5";
 
     this.parent.appendChild(this.nekoEl);
-    (window as any).nekoInterval = setInterval(this.frame.bind(this), 60);
+    (window as any).nekoInterval = setInterval(this.frame.bind(this), this.animationSpeed);
 
     if (!this.isAwake) {
       this.idle();
@@ -462,7 +477,7 @@ export default class Neko {
   public destroy(id?: number) {
     if (id && id !== this.nekoId) return;
     else {
-      const neko = document.querySelector(`[data-neko="neko-${this.nekoId}"]`);
+      const neko = document.querySelector(`[data-neko="${this.nekoId}"]`);
       if (neko) {
         neko.remove();
         clearInterval((window as any).nekoInterval);
