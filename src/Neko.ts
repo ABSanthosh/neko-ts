@@ -50,6 +50,7 @@ export default class Neko {
   private idleAnimation: string | null = null;
   private idleAnimationFrame: number = 0;
   private nekoSpeed: number = 10;
+  private nekoGif: string = NekoGif;
   private animationSpeed: number = 100;
 
   private distanceFromMouse: number = 25;
@@ -226,6 +227,16 @@ export default class Neko {
      */
     defaultState?: "awake" | "sleep";
     /**
+     * Which path to fetch the gif from or which imported *.gif module to use
+     * @default "imported content of ./neko.gif"
+     * @type string
+     * @example
+     * const neko = new Neko({
+     *   gifPathOrModule: "/my-path/to/neko.gif",
+     *   gifPathOrModule: await import("./neko.gif"),
+     * });
+     */
+    gifPathOrModule?: string;
      * The animation speed of neko (refresh rate in ms)
      * @default 60
      * @type {number}
@@ -269,6 +280,10 @@ export default class Neko {
       this.isAwake = false;
     }
 
+    if (options && options.gifPathOrModule) {
+      this.nekoGif = options.gifPathOrModule;
+    }
+
     this.size =
       options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
     this.nekoId = options && options.nekoId ? options.nekoId : this.nekoId;
@@ -302,7 +317,7 @@ export default class Neko {
 
     this.nekoEl.style.position = "fixed";
     this.nekoEl.style.imageRendering = "pixelated";
-    this.nekoEl.style.backgroundImage = `url(${NekoGif})`;
+    this.nekoEl.style.backgroundImage = `url(${this.nekoGif})`;
     this.nekoEl.style.backgroundSize = "calc(800%) calc(400%)";
     this.nekoEl.style.userSelect = "none";
     this.nekoEl.style.pointerEvents = "none";
