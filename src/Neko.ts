@@ -1,4 +1,6 @@
 import NekoGif from "./neko.gif";
+import { gifSpriteSets } from "./types";
+import type { BreedConfig } from "./types";
 
 export enum NekoSizeVariations {
   SMALL = 32,
@@ -11,6 +13,14 @@ enum NekoOffset {
   MEDIUM = -2,
   LARGE = -6,
 }
+
+const defaultBreed: BreedConfig = {
+  src: NekoGif,
+  spriteSets: gifSpriteSets,
+  gap: 0,
+  cols: 8,
+  rows: 4,
+};
 
 export default class Neko {
   /**
@@ -50,79 +60,14 @@ export default class Neko {
   private idleAnimation: string | null = null;
   private idleAnimationFrame: number = 0;
   private nekoSpeed: number = 10;
-  private nekoGif: string = NekoGif;
   private animationSpeed: number = 100;
+  private breed: BreedConfig = defaultBreed;
 
   private distanceFromMouse: number = 25;
 
   private origin = {
     x: 0,
     y: 0,
-  };
-
-  private spriteSets: {
-    [key: string]: number[][];
-  } = {
-    idle: [[-3, -3]],
-    alert: [[-7, -3]],
-    scratchSelf: [
-      [-5, 0],
-      [-6, 0],
-      [-7, 0],
-    ],
-    scratchWallN: [
-      [0, 0],
-      [0, -1],
-    ],
-    scratchWallS: [
-      [-7, -1],
-      [-6, -2],
-    ],
-    scratchWallE: [
-      [-2, -2],
-      [-2, -3],
-    ],
-    scratchWallW: [
-      [-4, 0],
-      [-4, -1],
-    ],
-    tired: [[-3, -2]],
-    sleeping: [
-      [-2, 0],
-      [-2, -1],
-    ],
-    N: [
-      [-1, -2],
-      [-1, -3],
-    ],
-    NE: [
-      [0, -2],
-      [0, -3],
-    ],
-    E: [
-      [-3, 0],
-      [-3, -1],
-    ],
-    SE: [
-      [-5, -1],
-      [-5, -2],
-    ],
-    S: [
-      [-6, -3],
-      [-7, -2],
-    ],
-    SW: [
-      [-5, -3],
-      [-6, -1],
-    ],
-    W: [
-      [-4, -2],
-      [-4, -3],
-    ],
-    NW: [
-      [-1, 0],
-      [-1, -1],
-    ],
   };
 
   private maxNekoSpeed: number = 20;
@@ -227,16 +172,6 @@ export default class Neko {
      */
     defaultState?: "awake" | "sleep";
     /**
-     * Which path to fetch the gif from or which imported *.gif module to use
-     * @default "imported content of ./neko.gif"
-     * @type string
-     * @example
-     * const neko = new Neko({
-     *   gifPathOrModule: "/my-path/to/neko.gif",
-     * });
-     */
-    gifPathOrModule?: string;
-    /**
      * The animation speed of neko (refresh rate in ms)
      * @default 100
      * @type {number}
@@ -246,6 +181,20 @@ export default class Neko {
      * });
      */
     animationSpeed?: number;
+    /**
+     * Preset breed or custom image config. Import presets from `neko-ts/breeds`.
+     * For a custom image pass `{ src, spriteSets, gap, cols, rows }`.
+     * Use `gifSpriteSets` or `breedSpriteSets` from `neko-ts` as the spriteSets value,
+     * or supply your own complete layout.
+     * @example
+     * import { tabby } from "neko-ts/breeds";
+     * new Neko({ breed: tabby });
+     *
+     * @example
+     * import { breedSpriteSets } from "neko-ts";
+     * new Neko({ breed: { src: "/my-cat.png", spriteSets: breedSpriteSets, gap: 1, cols: 8, rows: 6 } });
+     */
+    breed?: BreedConfig;
   }) {
     // get element with attribute data-neko
     const isNekoAlive = document.querySelector("[data-neko]") as HTMLDivElement;
@@ -280,16 +229,16 @@ export default class Neko {
       this.isAwake = false;
     }
 
-    if (options && options.gifPathOrModule) {
-      this.nekoGif = options.gifPathOrModule;
-    }
-
     this.size =
       options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
     this.nekoId = options && options.nekoId ? options.nekoId : this.nekoId;
 
     if (options && options.animationSpeed !== undefined) {
       this.animationSpeed = Math.max(16, options.animationSpeed);
+    }
+
+    if (options && options.breed) {
+      this.breed = options.breed;
     }
 
     this.create();
@@ -317,8 +266,12 @@ export default class Neko {
 
     this.nekoEl.style.position = "fixed";
     this.nekoEl.style.imageRendering = "pixelated";
-    this.nekoEl.style.backgroundImage = `url(${this.nekoGif})`;
-    this.nekoEl.style.backgroundSize = "calc(800%) calc(400%)";
+    this.nekoEl.style.backgroundImage = `url(${this.breed.src})`;
+    // compute sheet dimensions: cols/rows × sprite size + (cols/rows - 1) × gap
+    const { cols, rows, gap } = this.breed;
+    const sheetW = cols * this.size + (cols - 1) * gap;
+    const sheetH = rows * this.size + (rows - 1) * gap;
+    this.nekoEl.style.backgroundSize = `${sheetW}px ${sheetH}px`;
     this.nekoEl.style.userSelect = "none";
     this.nekoEl.style.pointerEvents = "none";
     this.nekoEl.style.zIndex = "5";
@@ -350,10 +303,12 @@ export default class Neko {
   }
 
   private setSprite(name: string, frame: number) {
-    const sprite = this.spriteSets[name][frame % this.spriteSets[name].length];
-    this.nekoEl!.style.backgroundPosition = `${sprite[0] * this.size}px ${
-      sprite[1] * this.size
-    }px`;
+    const { spriteSets, gap } = this.breed;
+    const frames = spriteSets[name as keyof typeof spriteSets];
+    if (!frames) return;
+    const sprite = frames[frame % frames.length];
+    const cellSize = this.size + gap;
+    this.nekoEl!.style.backgroundPosition = `${-sprite[0] * cellSize}px ${-sprite[1] * cellSize}px`;
   }
 
   private resetIdleAnimation() {
@@ -487,7 +442,7 @@ export default class Neko {
   }
 
   /**
-   * Put the neko to sleep. It will stop listening to mousemove and touchmove events and neko will return to its origin(+/- some random pixels).
+   * Put the neko to sleep. It will stop listening to mousemove and touchmove events and idle in place.
    *
    * @returns {void}
    * @example
@@ -501,8 +456,8 @@ export default class Neko {
     this.mouseMoveController.abort();
     this.touchController.abort();
 
-    this.mousePosX = this.origin.x;
-    this.mousePosY = this.origin.y - 15;
+    this.mousePosX = this.nekoPosX;
+    this.mousePosY = this.nekoPosY;
 
     this.isAwake = false;
   }
@@ -554,5 +509,46 @@ export default class Neko {
     this.size = size;
     this.nekoEl!.style.width = `${this.size}px`;
     this.nekoEl!.style.height = `${this.size}px`;
+    const { cols, rows, gap } = this.breed;
+    const sheetW = cols * this.size + (cols - 1) * gap;
+    const sheetH = rows * this.size + (rows - 1) * gap;
+    this.nekoEl!.style.backgroundSize = `${sheetW}px ${sheetH}px`;
+  }
+
+  /**
+   * Hot-swap the sprite sheet without recreating the neko.
+   * The current animation state is preserved; the new spriteSets take effect on the next frame.
+   * Pass `undefined` to reset to the built-in neko.gif.
+   */
+  public setBreed(breed?: BreedConfig) {
+    this.breed = breed ?? defaultBreed;
+    this.nekoEl!.style.backgroundImage = `url(${this.breed.src})`;
+    const { cols, rows, gap } = this.breed;
+    const sheetW = cols * this.size + (cols - 1) * gap;
+    const sheetH = rows * this.size + (rows - 1) * gap;
+    this.nekoEl!.style.backgroundSize = `${sheetW}px ${sheetH}px`;
+  }
+
+  /** Update movement speed. Clamped to [10, 20]. */
+  public setSpeed(speed: number) {
+    this.nekoSpeed = Math.max(
+      this.minNekoSpeed,
+      Math.min(this.maxNekoSpeed, speed)
+    );
+  }
+
+  /** Update the frame refresh rate in ms (minimum 16). Resets the interval. */
+  public setAnimationSpeed(ms: number) {
+    this.animationSpeed = Math.max(16, ms);
+    clearInterval((window as any).nekoInterval);
+    (window as any).nekoInterval = setInterval(
+      this.frame.bind(this),
+      this.animationSpeed
+    );
+  }
+
+  /** Current viewport position of the neko center. */
+  public get position(): { x: number; y: number } {
+    return { x: this.nekoPosX, y: this.nekoPosY };
   }
 }

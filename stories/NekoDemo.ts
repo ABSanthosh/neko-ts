@@ -1,5 +1,5 @@
 import "./storyStyle.css";
-import { Neko, NekoSizeVariations } from "./dist/neko-ts";
+import { Neko, NekoSizeVariations } from "../dist/neko-ts";
 // import { Neko, NekoSizeVariations } from "../src";
 
 export function RenderPage() {
