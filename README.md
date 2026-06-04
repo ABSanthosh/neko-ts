@@ -4,7 +4,7 @@
 
 A simple fun addition to your website, a neko that follows your mouse around! (or just sits there if you don't move your mouse)
 
-### Check out the demo [here](https://absanthosh.github.io/neko-ts/?path=/story/neko-nekodemo--base-demo)
+### Check out the demo [here](https://absanthosh.github.io/neko-ts/)
 
 ## Installation
 
