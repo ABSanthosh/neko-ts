@@ -103,7 +103,7 @@ export const CustomBreed: StoryObj = {
     descEl.className = "story-desc";
     descEl.textContent =
       "You can supply your own sprite sheet via BreedConfig. " +
-      "Use breedSpriteSets for a PNG sheet with 8 cols × 6 rows and 1 px gaps, " +
+      "Use breedSpriteSets for a PNG sheet with 8 cols × 4 rows and 1 px gap, " +
       "or gifSpriteSets for the bundled neko.gif layout (8 cols × 4 rows, no gap). " +
       "The marmalade breed is running live above as a reference.";
 
@@ -117,7 +117,7 @@ export const CustomBreed: StoryObj = {
       `  spriteSets: breedSpriteSets,`,
       `  gap: 1,`,
       `  cols: 8,`,
-      `  rows: 6,`,
+      `  rows: 4,`,
       `};`,
       ``,
       `new Neko({ breed: myBreed });`,

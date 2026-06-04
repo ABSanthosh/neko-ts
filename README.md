@@ -66,7 +66,7 @@ const myBreed: BreedConfig = {
   spriteSets: breedSpriteSets,
   gap: 1,
   cols: 8,
-  rows: 6,
+  rows: 4,
 };
 
 const neko = new Neko({ breed: myBreed });
@@ -156,7 +156,7 @@ Each breed is a `BreedConfig` object that can be passed directly to the `breed` 
 | Export | Description |
 |---|---|
 | `gifSpriteSets` | Sprite layout for the built-in neko.gif (8 cols × 4 rows, no gap) |
-| `breedSpriteSets` | Sprite layout for the breed PNG sheets (8 cols × 6 rows, 1px gap) |
+| `breedSpriteSets` | Sprite layout for the breed PNG sheets (8 cols × 4 rows, 1px gap) |
 
 Use these constants when defining a custom `BreedConfig`.
 

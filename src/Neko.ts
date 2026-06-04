@@ -190,7 +190,7 @@ export default class Neko {
      *
      * @example
      * import { breedSpriteSets } from "neko-ts";
-     * new Neko({ breed: { src: "/my-cat.png", spriteSets: breedSpriteSets, gap: 1, cols: 8, rows: 6 } });
+     * new Neko({ breed: { src: "/my-cat.png", spriteSets: breedSpriteSets, gap: 1, cols: 8, rows: 4 } });
      */
     breed?: BreedConfig;
   }) {
