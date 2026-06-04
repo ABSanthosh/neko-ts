@@ -4,7 +4,10 @@
   "version": "0.0.7",
   "type": "module",
   "license": "MIT",
-  "repository": "https://github.com/ABSanthosh/neko-ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ABSanthosh/neko-ts.git"
+  },
   "author": "ABSanthosh <a.b.santhosh02@gmail.com>",
   "homepage": "https://ABSanthosh.github.io/neko-ts",
   "scripts": {
