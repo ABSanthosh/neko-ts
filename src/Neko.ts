@@ -49,9 +49,7 @@ export default class Neko {
   private nekoPosY: number = this.size / 2;
   private mousePosX: number = this.size / 2;
   private mousePosY: number = this.size / 2;
-  private isReduced: boolean = window.matchMedia(
-    `(prefers-reduced-motion: reduce)`
-  ).matches;
+  private isReduced: boolean = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
   private mouseMoveController = new AbortController();
   private touchController = new AbortController();
 
@@ -207,8 +205,8 @@ export default class Neko {
         options.speed > this.maxNekoSpeed
           ? this.maxNekoSpeed
           : options.speed < this.minNekoSpeed
-          ? this.minNekoSpeed
-          : options.speed;
+            ? this.minNekoSpeed
+            : options.speed;
     }
 
     if (options && options.origin) {
@@ -229,8 +227,7 @@ export default class Neko {
       this.isAwake = false;
     }
 
-    this.size =
-      options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
+    this.size = options && options.nekoSize ? options.nekoSize : NekoSizeVariations.SMALL;
     this.nekoId = options && options.nekoId ? options.nekoId : this.nekoId;
 
     if (options && options.animationSpeed !== undefined) {
@@ -320,11 +317,7 @@ export default class Neko {
     this.idleTime += 1;
 
     // every ~20 seconds
-    if (
-      this.idleTime > 5 &&
-      Math.floor(Math.random() * 100) == 0 &&
-      this.idleAnimation == null
-    ) {
+    if (this.idleTime > 5 && Math.floor(Math.random() * 100) == 0 && this.idleAnimation == null) {
       let availableIdleAnimations = ["sleeping", "scratchSelf"];
       if (this.nekoPosX < 32) {
         availableIdleAnimations.push("scratchWallW");
@@ -339,9 +332,7 @@ export default class Neko {
         availableIdleAnimations.push("scratchWallS");
       }
       this.idleAnimation =
-        availableIdleAnimations[
-          Math.floor(Math.random() * availableIdleAnimations.length)
-        ];
+        availableIdleAnimations[Math.floor(Math.random() * availableIdleAnimations.length)];
     }
 
     switch (this.idleAnimation) {
@@ -531,20 +522,14 @@ export default class Neko {
 
   /** Update movement speed. Clamped to [10, 20]. */
   public setSpeed(speed: number) {
-    this.nekoSpeed = Math.max(
-      this.minNekoSpeed,
-      Math.min(this.maxNekoSpeed, speed)
-    );
+    this.nekoSpeed = Math.max(this.minNekoSpeed, Math.min(this.maxNekoSpeed, speed));
   }
 
   /** Update the frame refresh rate in ms (minimum 16). Resets the interval. */
   public setAnimationSpeed(ms: number) {
     this.animationSpeed = Math.max(16, ms);
     clearInterval((window as any).nekoInterval);
-    (window as any).nekoInterval = setInterval(
-      this.frame.bind(this),
-      this.animationSpeed
-    );
+    (window as any).nekoInterval = setInterval(this.frame.bind(this), this.animationSpeed);
   }
 
   /** Current viewport position of the neko center. */

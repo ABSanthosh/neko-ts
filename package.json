@@ -13,7 +13,9 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build && touch storybook-static/.nojekyll",
-    "deploy": "yarn build-storybook && gh-pages -d storybook-static"
+    "deploy": "yarn build-storybook && gh-pages -d storybook-static",
+    "format": "prettier --write \"src/**/*.ts\" \"stories/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"stories/**/*.ts\""
   },
   "main": "./dist/neko-ts.cjs",
   "module": "./dist/neko-ts.js",
@@ -44,6 +46,7 @@
     "@storybook/html-vite": "^10.4.2",
     "@types/node": "^25.9.1",
     "gh-pages": "^6.3.0",
+    "prettier": "^3.8.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "storybook": "^10.4.2",

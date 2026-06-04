@@ -82,7 +82,8 @@ const meta = {
     nekoSize: {
       control: "select",
       options: ["SMALL", "MEDIUM", "LARGE"],
-      description: "Size of the neko element. Maps to `NekoSizeVariations` (SMALL=32px, MEDIUM=38px, LARGE=42px).",
+      description:
+        "Size of the neko element. Maps to `NekoSizeVariations` (SMALL=32px, MEDIUM=38px, LARGE=42px).",
       table: { defaultValue: { summary: "SMALL" } },
     },
     speed: {
@@ -153,10 +154,7 @@ export const Playground: StoryObj<NekoArgs> = {
       });
     }
 
-    const breedLine =
-      args.breed === "default (gif)"
-        ? ""
-        : `\n  breed: breeds.${args.breed},`;
+    const breedLine = args.breed === "default (gif)" ? "" : `\n  breed: breeds.${args.breed},`;
 
     const snippet = [
       `new Neko({`,
@@ -164,13 +162,14 @@ export const Playground: StoryObj<NekoArgs> = {
       `  speed: ${args.speed},`,
       `  animationSpeed: ${args.animationSpeed},`,
       `  defaultState: "${args.defaultState}",`,
-      `  origin: { x: window.innerWidth / 2, y: window.innerHeight / 2 },` +
-        breedLine,
+      `  origin: { x: window.innerWidth / 2, y: window.innerHeight / 2 },` + breedLine,
       `})`,
     ].join("\n");
 
     return app(
-      desc("Move your cursor to make the neko follow it. Adjust controls in the panel to see changes."),
+      desc(
+        "Move your cursor to make the neko follow it. Adjust controls in the panel to see changes."
+      ),
       code(snippet)
     );
   },
@@ -276,7 +275,9 @@ export const DestroyDemo: StoryObj<NekoArgs> = {
     );
 
     return app(
-      desc("destroy() removes the neko from the DOM and clears its animation interval. Recreate spawns a fresh instance."),
+      desc(
+        "destroy() removes the neko from the DOM and clears its animation interval. Recreate spawns a fresh instance."
+      ),
       row(destroyBtn, recreateBtn),
       row(code("status: "), st)
     );
@@ -365,7 +366,9 @@ export const CustomOrigin: StoryObj = {
     }, 0);
 
     return app(
-      desc("The brown square marks the spawn origin. sleep() idles the neko in place; wake() resumes cursor tracking."),
+      desc(
+        "The brown square marks the spawn origin. sleep() idles the neko in place; wake() resumes cursor tracking."
+      ),
       container,
       controls,
       code("new Neko({ origin: { x, y } })")
