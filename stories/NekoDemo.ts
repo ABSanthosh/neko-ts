@@ -22,6 +22,7 @@ export function RenderPage() {
       nekoId: 1,
       nekoSize: NekoSizeVariations.SMALL,
       speed: 10,
+      animationSpeed: 100,
       origin: {
         x: restingPlace.offsetLeft + restingPlace.offsetWidth / 2,
         y: restingPlace.offsetTop + restingPlace.offsetHeight / 2,
