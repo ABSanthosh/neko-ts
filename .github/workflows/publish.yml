@@ -3,6 +3,7 @@ name: Publish to npm and deploy Storybook
 on:
   push:
     branches: [dist]
+  workflow_dispatch:
 
 jobs:
   publish:
